@@ -39,53 +39,37 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Function to fetch and display categories, areas, and ingredients
-    function fetchAndDisplayList(apiEndpoint, listType) {
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                if (data[listType]) {
-                    // Create a list to hold items
-                    const list = document.createElement('ul');
-                    list.classList.add('list-items');
-
-                    // Loop through items and create list items
-                    data[listType].forEach(item => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = item[`str${listType.charAt(0).toUpperCase() + listType.slice(1)}`];
-                        listItem.addEventListener('click', function() {
-                            // Fetch and display meals for this category on click
-                            fetchAndDisplayMeals(item[`str${listType.charAt(0).toUpperCase() + listType.slice(1)}`]);
-                        });
-                        list.appendChild(listItem);
-                    });
-
-                    // Clear existing list before appending new one
-                    const existingList = popupBox.querySelector('.list-items');
-                    if (existingList) {
-                        existingList.remove();
-                    }
-
-                    // Append list to popup box
-                    popupBox.appendChild(list);
-
-                    // Show popup box
-                    popupBox.style.display = 'block';
-                }
-            })
-            .catch(error => {
-                console.error(`Error fetching ${listType}:`, error);
-            });
-    }
-
     // Fetch meal categories from TheMealDB API
-    fetchAndDisplayList('https://www.themealdb.com/api/json/v1/1/list.php?c=list', 'categories');
+    fetch('https://www.themealdb.com/api/json/v1/1/categories.php')
+        .then(response => response.json())
+        .then(data => {
+            data.categories.forEach(category => {
+                // Create category list item element
+                const categoryElement = document.createElement('li');
+                categoryElement.classList.add('category');
 
-    // Fetch meal areas from TheMealDB API
-    fetchAndDisplayList('https://www.themealdb.com/api/json/v1/1/list.php?a=list', 'areas');
+                // Create image element for category thumbnail
+                const img = document.createElement('img');
+                img.src = category.strCategoryThumb;
+                img.alt = category.strCategory;
+                img.addEventListener('click', function() {
+                    // Fetch and display meals for this category on click
+                    fetchAndDisplayMeals(category.strCategory);
+                });
+                categoryElement.appendChild(img);
 
-    // Fetch meal ingredients from TheMealDB API
-    fetchAndDisplayList('https://www.themealdb.com/api/json/v1/1/list.php?i=list', 'ingredients');
+                // Create heading for category name
+                const heading = document.createElement('h3');
+                heading.textContent = category.strCategory;
+                categoryElement.appendChild(heading);
+
+                // Append category list item to categories list
+                categoriesDiv.appendChild(categoryElement);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching categories:', error);
+        });
 
     // Close popup box when clicking outside of it
     document.addEventListener('click', function(event) {
@@ -93,19 +77,4 @@ document.addEventListener('DOMContentLoaded', function() {
             popupBox.style.display = 'none';
         }
     });
-
-    // Close popup box when pressing Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            popupBox.style.display = 'none';
-        }
-    });
-
-    // Close popup box when clicking on close button
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'Close';
-    closeButton.addEventListener('click', function() {
-        popupBox.style.display = 'none';
-    });
-    popupBox.appendChild(closeButton);
 });
