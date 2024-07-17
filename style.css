@@ -10,8 +10,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
-    padding: 20px;
-    max-width: 1200px;
+    padding: 100px;
+    max-width: 2000px;
     margin: 0 auto;
 }
 
