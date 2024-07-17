@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+body {
+    background-color: #e0f7fa; 
+    font-family: Arial, sans-serif;
+}
+
 /* Style for categories container */
 #categories {
     display: grid;
@@ -60,7 +65,7 @@ h1 {
     text-align: center;
     margin-top: 20px;
     color: #333;
-    background-color: #f0f0f0;
+    background-color: #b3e5fc;
     padding: 10px;
     border-radius: 8px;
 }
@@ -93,7 +98,7 @@ h1 {
 
 .popup-box li {
     padding: 8px;
-    background-color: #f0f0f0;
+    background-color: #e0f7fa;
     border-radius: 4px;
     text-align: center;
     word-wrap: break-word;
